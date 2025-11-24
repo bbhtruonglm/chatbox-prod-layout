@@ -98,6 +98,8 @@ import { container } from 'tsyringe'
 import type { PageType } from '@/service/interface/app/page'
 
 const $cdn = SingletonCdn.getInst()
+/** Các nền tảng có avatar */
+const NO_AVT_PLATFORMS = ['ZALO', 'TIKTOK']
 
 const $props = withDefaults(
   defineProps<{
@@ -121,15 +123,17 @@ const conversationStore = useConversationStore()
 const animate_pulse = ref('animate-pulse')
 
 onMounted(() => {
-  // tắt hiệu ứng với dạng web
+  /** tắt hiệu ứng với dạng web */
   if ($props.conversation?.platform_type === 'WEBSITE') removeAnimatePulse()
-
-  // nếu zalo không có hình ảnh
+  /** tắt hiệu ứng với các nền tảng không có avatar */
   if (
-    $props.conversation?.platform_type?.includes('ZALO') &&
+    NO_AVT_PLATFORMS.some(p =>
+      $props.conversation?.platform_type?.includes(p)
+    ) &&
     !$props.conversation?.client_avatar
-  )
+  ) {
     removeAnimatePulse()
+  }
 })
 
 /**tạo bg dựa trên chữ cái */
