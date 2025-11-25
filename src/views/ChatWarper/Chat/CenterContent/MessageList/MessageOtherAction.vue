@@ -1,33 +1,38 @@
 <template>
   <div
-    id="chat__message-date"
-    class="text-xxs text-slate-500 absolute group-hover:block hidden w-max z-10 -bottom-3.5"
-    :class="sender_id === fb_page_id ? 'right-0' : 'left-0'"
+    id="chat__message-other-action"
+    class="text-xxs text-slate-500 absolute z-10 h-fit group"
+    :class="sender_id === fb_page_id ? '-left-[72px]' : '-right-[72px]'"
+    style="bottom: 0"
   >
-    <span
-      v-if="parserStaffName()"
-      class="mr-1"
+    <div
+      class="flex gap-1 border border-slate-100 items-center top-3 w-fit bg-slate-100 rounded-lg opacity-0 group-hover:opacity-100 cursor-pointer"
     >
-      <span class="font-medium">{{ parserStaffName() }}</span>
-      {{ $t('v1.view.main.dashboard.chat.message.sent') }}
-    </span>
-    <span
-      v-if="time"
-      class="mr-1"
-    >
-      {{ $date_handle.formatShort(time) }}
-    </span>
-    <span v-if="is_edit">
-      ({{ $t('v1.view.main.dashboard.chat.message.edited') }})
-    </span>
-    <span v-if="is_show_duration">
-      {{ $t('v1.view.main.dashboard.chat.message.reply_time_basic') }}
-      {{ duration }}
-    </span>
+      <span
+        v-tooltip="t('Trả lời')"
+        class="hover:bg-slate-300 rounded-lg p-0.5"
+        ><ArrowUturnLeftIcon class="size-4"
+      /></span>
+      <span
+        v-tooltip="t('Chuyển tiếp')"
+        class="hover:bg-slate-300 rounded-lg p-0.5"
+        ><ArrowUturnRightIcon class="size-4"
+      /></span>
+      <span class="hover:bg-slate-300 rounded-lg p-0.5"
+        ><EllipsisHorizontalIcon class="size-4"
+      /></span>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { DateHandle } from '@/utils/helper/DateHandle'
+import {
+  ArrowUturnLeftIcon,
+  ArrowUturnRightIcon,
+  EllipsisHorizontalIcon,
+} from '@heroicons/vue/24/outline'
+import { Ellipsis } from 'lucide-vue-next'
+
 import { container } from 'tsyringe'
 import { useI18n } from 'vue-i18n'
 
@@ -63,28 +68,7 @@ const $props = withDefaults(
   }>(),
   {}
 )
+console.log('$props.sender_id', $props.sender_id)
 
 const $date_handle = container.resolve(DateHandle)
-
-/**phân tích tên nv từ meta */
-function parserStaffName() {
-  /** nếu là AI gửi */
-  if ($props.is_ai) return t('Trợ lý AI')
-  /** Trường hợp website là tin nhắn khởi tạo */
-  // if (!$props.meta && $props.message_type !== 'client')
-  //   return t('Tin nhắn khởi tạo')
-  // /** Trường hợp chatbot, kịch bản */
-  // if ($props.meta === '__undefined__undefined') return t('Chatbot')
-
-  /** tên nhân sự nhắn tin */
-  const STAFF_NAME = $props.meta?.split('__')?.[1] || $props?.group_client_name
-
-  // console.log($props.group_client_name, 'hehe')
-  // console.log($props.meta, 'metaa')
-
-  /** nếu không có thì là AI nhắn */
-  if (STAFF_NAME === 'undefined') return ''
-  /** Trả ra tên của người gửi */
-  return $props.meta?.split('__')?.[1] || $props.group_client_name
-}
 </script>
