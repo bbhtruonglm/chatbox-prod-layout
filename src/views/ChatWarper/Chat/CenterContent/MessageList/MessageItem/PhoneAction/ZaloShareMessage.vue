@@ -1,108 +1,185 @@
 <template>
   <Modal
     ref="modal_widget__group_share_ref"
-    class_modal="w-[432px]"
+    class_modal="w-[80dvw]"
     :class_body="`flex flex-col gap-2 ${
       view === 'SEARCH' || !view ? 'h-[90dvh]' : 'h-[80dvh]'
     }`"
   >
     <template #header>
-      {{ $t('v1.common.create_zalo_group') }}
+      {{ $t('v1.common.share_message') }}
     </template>
 
     <template #body>
-      <div class="bg-white h-full w-full rounded-md p-2 flex flex-col gap-4">
-        <!-- Tạo group -->
-        <label>{{ $t('v1.common.create_new_group') }}</label>
-        <div class="flex gap-2 items-center w-full">
-          <input
-            v-model="group_name"
-            :class="[
-              'border h-8 w-full rounded px-2 py-0.5 text-sm',
-              error_group_name ? 'border-red-500' : '',
-            ]"
-            :placeholder="$t('v1.common.your_group_name')"
-          />
-          <button
-            class="flex-shrink-0 bg-blue-700 text-white px-2 py-1 rounded-md text-sm"
-            @click="handleCreateGroup"
-          >
-            {{ $t('v1.common.create_group') }}
-          </button>
-        </div>
-        <p
-          v-if="error_select_members"
-          class="text-red-500 text-xs mt-1"
-        >
-          {{ error_select_members }}
-        </p>
+      <div class="flex gap-2 overflow-hidden">
+        <div class="bg-white h-full w-full rounded-md p-2 flex flex-col gap-4">
+          <!-- Search member -->
+          <div class="relative">
+            <MagnifyingGlassIcon
+              class="absolute top-1/2 left-3 -translate-y-1/2 w-4 h-4 text-slate-500"
+            />
+            <input
+              v-model="search_conversation"
+              class="w-full bg-slate-100 placeholder-slate-500 py-1.5 pl-9 pr-8 text-sm rounded-md"
+              type="text"
+              :placeholder="$t('v1.common.search_member')"
+            />
+            <XMarkIcon
+              @click="search_conversation = undefined"
+              v-if="search_conversation"
+              class="absolute top-1/2 right-2 -translate-y-1/2 size-5 text-red-500 cursor-pointer"
+            />
+          </div>
 
-        <!-- Search member -->
-        <div class="relative">
-          <MagnifyingGlassIcon
-            class="absolute top-1/2 left-3 -translate-y-1/2 w-4 h-4 text-slate-500"
-          />
-          <input
-            v-model="search_conversation"
-            class="w-full bg-slate-100 placeholder-slate-500 py-1.5 pl-9 pr-8 text-sm rounded-md"
-            type="text"
-            :placeholder="$t('v1.common.search_member')"
-          />
-          <XMarkIcon
-            @click="search_conversation = undefined"
-            v-if="search_conversation"
-            class="absolute top-1/2 right-2 -translate-y-1/2 size-5 text-red-500 cursor-pointer"
-          />
-        </div>
-
-        <!-- Selected info -->
-        <div class="flex w-full gap-2 items-center justify-between text-xs">
-          <span
-            class="p-0.5 px-2 bg-blue-50 text-blue-700 font-semibold rounded-md"
-          >
-            {{ $t('v1.common.member_selected') }}
-            {{ selected_members.length }}/100
-          </span>
-          <span
-            class="p-0.5 px-2 bg-blue-50 text-blue-700 font-semibold rounded-md"
-            >{{ count_conversation }}</span
-          >
-        </div>
-
-        <!-- List conversation -->
-        <div class="flex-1 overflow-y-auto border-t border-slate-200 pt-2">
+          <!-- Selected info -->
+          <!-- <div class="flex w-full gap-2 items-center justify-between text-xs">
+            <span
+              class="p-0.5 px-2 bg-blue-50 text-blue-700 font-semibold rounded-md"
+            >
+              {{ $t('v1.common.member_selected') }}
+              {{ selected_members.length }}
+            </span>
+          </div> -->
           <div
-            v-for="conv in FILTERED_CONVERSATION"
-            :key="conv.fb_client_id + '_' + conv.fb_page_id"
             class="flex items-center justify-between p-2 border-b border-slate-100 hover:bg-slate-50 cursor-pointer"
-            @click="toggleMember(conv)"
+            @click="select_all()"
           >
             <div class="flex items-center gap-4">
               <input
                 type="checkbox"
-                :checked="selected_members.includes(conv)"
-                @click.stop
+                :checked="
+                  selected_members.length === FILTERED_CONVERSATION.length
+                "
                 class="h-4 w-4 text-blue-600"
               />
-              <img
-                :src="conv.client_avatar"
-                alt=""
-                class="size-10 rounded-full"
-              />
+
               <div>
-                <p class="text-sm font-medium">{{ conv.client_name }}</p>
-                <p class="text-xs text-slate-500">
-                  {{ conv.client_phone || '-' }}
+                <p class="text-sm font-medium flex items-center gap-1">
+                  <span
+                    class="flex text-xs justify-center items-center flex-shrink-0 h-5 rounded-full p-1 bg-blue-50 text-blue-700"
+                  >
+                    {{ $t('v1.common.select_all') }}
+                  </span>
                 </p>
               </div>
             </div>
           </div>
 
+          <!-- List conversation -->
+          <div class="flex-1 overflow-y-auto border-t border-slate-200 pt-2">
+            <div
+              v-for="(conv, index) in FILTERED_CONVERSATION"
+              :key="conv.fb_client_id + '_' + conv.fb_page_id"
+              class="flex items-center justify-between p-2 border-b border-slate-100 hover:bg-slate-50 cursor-pointer"
+              @click="toggleMember(conv)"
+            >
+              <div class="flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  :checked="selected_members.includes(conv)"
+                  class="h-4 w-4 text-blue-600"
+                />
+                <img
+                  :src="conv.client_avatar"
+                  alt=""
+                  class="size-10 rounded-full"
+                />
+                <div>
+                  <p class="text-sm font-medium flex items-center gap-1">
+                    <span
+                      class="flex text-xs justify-center items-center flex-shrink-0 h-5 rounded-full p-1 bg-blue-50 text-blue-700"
+                    >
+                      {{ index + 1 }} </span
+                    >{{ conv.client_name }}
+                  </p>
+                  <p class="text-xs text-slate-500">
+                    {{ conv.client_phone || '-' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="FILTERED_CONVERSATION.length === 0"
+              class="p-2 text-slate-400 text-sm"
+            >
+              {{ $t('v1.common.no_data') }}
+            </div>
+          </div>
+        </div>
+        <div class="bg-white h-full w-full rounded-md p-2 flex flex-col">
+          <!-- Selected info -->
           <div
-            v-if="FILTERED_CONVERSATION.length === 0"
-            class="p-2 text-slate-400 text-sm"
+            class="flex w-full gap-2 items-center justify-between text-xs pb-2"
           >
-            {{ $t('v1.common.no_data') }}
+            <span
+              v-if="selected_members.length > 0"
+              class="flex items-center gap-2 py-2 px-4 bg-blue-50 text-blue-700 text-sm font-semibold rounded-md"
+            >
+              {{ $t('v1.common.member_selected') }}
+              {{ selected_members.length }}
+              <span>
+                <XMarkIcon
+                  @click="selected_members = []"
+                  v-if="selected_members.length > 0"
+                  class="size-5 text-red-500 cursor-pointer"
+                />
+              </span>
+            </span>
+          </div>
+
+          <!-- List conversation -->
+          <div class="flex-1 overflow-y-auto py-2">
+            <div
+              v-for="conv in selected_members"
+              :key="conv.fb_client_id + '_' + conv.fb_page_id"
+              class="flex items-center justify-between p-2 border-b border-slate-100 hover:bg-slate-50 cursor-pointer"
+              @click="toggleMember(conv)"
+            >
+              <div class="flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  :checked="selected_members.includes(conv)"
+                  class="h-4 w-4 text-blue-600"
+                />
+                <img
+                  :src="conv.client_avatar"
+                  alt=""
+                  class="size-10 rounded-full"
+                />
+                <div>
+                  <p class="text-sm font-medium">{{ conv.client_name }}</p>
+                  <p class="text-xs text-slate-500">
+                    {{ conv.client_phone || '-' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="FILTERED_CONVERSATION.length === 0"
+              class="p-2 text-slate-400 text-sm"
+            >
+              {{ $t('v1.common.no_data') }}
+            </div>
+          </div>
+
+          <!-- Selected info -->
+          <div
+            class="flex w-full gap-2 items-center justify-center text-xs w-full pt-2"
+          >
+            <button
+              @click="shareMessage()"
+              class="py-2 px-4 font-medium text-base rounded-md"
+              :class="[
+                selected_members.length === 0
+                  ? 'cursor-not-allowed opacity-50 bg-slate-200 text-slate-500 border border-slate-200'
+                  : 'cursor-pointer bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-100 hover:border-blue-200',
+              ]"
+              :disabled="selected_members.length === 0"
+            >
+              {{ $t('v1.common.share_to') }}
+            </button>
           </div>
         </div>
       </div>
@@ -253,7 +330,6 @@ async function fetchAllConversations() {
   /** Filter mặc định */
   const FILTER: FilterConversation = {
     conversation_type: 'CHAT',
-    display_style: 'FRIEND',
     is_spam_fb: 'NO',
   }
   /** Sắp xếp theo số lượng unread, sau đó thời gian tin nhắn cuối */
@@ -312,7 +388,7 @@ const FILTERED_CONVERSATION = computed(() => {
 /**
  * Xử lý tạo group trên Zalo
  */
-async function handleCreateGroup() {
+async function shareMessage() {
   /** Reset lỗi */
   error_group_name.value = false
   error_select_members.value = ''
@@ -373,6 +449,19 @@ function toggleMember(conv: any) {
   } else {
     selected_members.value.push(conv)
   }
+}
+
+/**
+ * Chọn tất cả thành viên
+ */
+function select_all() {
+  /** Nếu đang chọn tất cả thì reset */
+  if (selected_members.value?.length === FILTERED_CONVERSATION.value.length) {
+    selected_members.value = []
+    return
+  }
+  /** Nếu chưa chọn tất cả thì chọn tất cả */
+  selected_members.value = FILTERED_CONVERSATION.value
 }
 
 /** Expose toggleModal ra component cha để gọi trực tiếp */

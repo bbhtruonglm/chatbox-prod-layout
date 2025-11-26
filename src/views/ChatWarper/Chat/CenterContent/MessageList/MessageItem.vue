@@ -92,6 +92,11 @@
       :message_type="message.message_type"
     />
     <MessageReaction
+    v-if="
+        message_type === 'client' ||
+        message_type === 'page' ||
+        message_type === 'group'
+      "
       :class="{
         'right-0': message_type !== 'client',
       }"

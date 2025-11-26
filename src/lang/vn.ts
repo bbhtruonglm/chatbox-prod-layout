@@ -173,6 +173,8 @@ const source: Language = {
       copy: 'Sao chép',
       continue: 'Tiếp tục',
       warning: 'Cảnh báo',
+      share_message: 'Chuyển tiếp tin nhắn',
+      share_to: 'Chia sẻ tin nhắn',
     },
     view: {
       network: {
