@@ -202,8 +202,8 @@ const is_admin = computed(() => conversationStore.isCurrentStaffAdmin())
 /** Check trạng thái nhân viên hiện tại == user được assign */
 const is_staff_assigned = computed(() => {
   return (
-    (conversationStore.getAssignStaff()?.fb_staff_id ||
-      conversationStore.getAssignStaff()?.user_id) ===
+    (conversationStore.getAssignStaff()?.user_id ||
+      conversationStore.getAssignStaff()?.fb_staff_id) ===
     chatbotUserStore.getStaffId()
   )
 })
