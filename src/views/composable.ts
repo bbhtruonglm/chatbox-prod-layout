@@ -58,7 +58,9 @@ export function initRequireData() {
       /* lấy danh sách các tổ chức */
       orgStore.list_org = await new BillingAppOrganization().readOrg()
 
-      /* tự động lấy thông tin tổ chức hiện tại */
+      console.log(orgStore.list_org, 'lisst org')
+
+      // tự động lấy thông tin tổ chức hiện tại
       getCurrentOrgInfo()
     } catch (e) {
       /* hiển thị thông báo lỗi */

@@ -3,7 +3,7 @@ import { Botx } from '@/utils/api/Botx'
 /**gọi API lên server widget của chatbox */
 class Widget extends Botx {
   constructor(path: string) {
-    // gọi API lên server của chatbox
+    /** gọi API lên server của chatbox */
     super(`${$env.host.widget}/${path}`)
   }
 }
@@ -14,14 +14,18 @@ export class QuickAnswer extends Widget {
   readonly #PAGE_ID: string
 
   constructor(page_id: string) {
-    // thiết lập module path
+    /** thiết lập module path */
     super('v1/quick-answer/quickanswer')
 
-    // lưu lại id trang
+    /** lưu lại id trang */
     this.#PAGE_ID = page_id
   }
 
-  /**đọc dữ liệu trả lời nhanh */
+  /**đọc dữ liệu trả lời nhanh
+   * @param skip số bản ghi bỏ qua
+   * @param limit số bản ghi lấy về
+   * @param search từ khóa tìm kiếm
+   */
   async readAnswer(
     skip: number,
     limit: number,

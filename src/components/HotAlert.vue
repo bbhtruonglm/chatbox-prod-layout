@@ -159,8 +159,8 @@ const is_loading = ref(false)
 
 watch(
   () => [
-    orgStore.selected_org_id,
-    orgStore.is_selected_all_org,
+    // orgStore.selected_org_id,
+    // orgStore.is_selected_all_org,
     orgStore.list_org,
   ],
   getNoti
@@ -184,6 +184,7 @@ async function getNoti() {
     // } else {
     //   // lấy tất cả các thông báo
     // }
+    list_noti.value = await getAllNoti()
 
     /** call noti theo list org (không tách từng tổ chức nữa) */
     list_noti.value = await getAllNoti()

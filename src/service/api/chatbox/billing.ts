@@ -207,15 +207,22 @@ export const get_noti = async (
     is_disable_org: true,
   })
 /**đọc thông báo */
-export const get_all_noti = async (
-  org_id?: string[],
-  limit?: number,
-  is_read?: {},
+export const get_all_noti = async ({
+  org_id,
+  limit,
+  is_read,
+  noti_code,
+  sort,
+}: {
+  org_id?: string[]
+  limit?: number
+  is_read?: {}
   noti_code?: string[]
-): Promise<NotiInfo[]> =>
-  chatboxSyncNew({
+  sort?: string
+}): Promise<NotiInfo[]> =>
+  chatboxSync({
     uri: `${$env.host.billing}/app/noti/get_noti`,
-    body: { org_id, limit, is_read, noti_code },
+    body: { org_id, limit, is_read, noti_code, sort },
     is_disable_org: true,
   })
 
@@ -228,7 +235,7 @@ export const count_noti = async (org_id: string): Promise<number> =>
   })
 /**xem thông báo */
 export const count_all_noti = async (org_id: string[]): Promise<number> =>
-  chatboxSyncNew({
+  chatboxSync({
     uri: `${$env.host.billing}/app/noti/count_noti`,
     body: { org_id },
     is_disable_org: true,
