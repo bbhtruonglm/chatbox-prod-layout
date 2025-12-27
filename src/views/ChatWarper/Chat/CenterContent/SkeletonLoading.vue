@@ -7,8 +7,8 @@
       >
         <div class="w-10 h-10 rounded-oval bg-slate-200 animate-pulse"></div>
         <div class="flex flex-col gap-2">
-          <div class="w-32 h-3 bg-slate-200 rounded-oval animate-pulse"></div>
-          <div class="w-20 h-2 bg-slate-200 rounded-oval animate-pulse"></div>
+          <div class="w-32 h-3 bg-slate-200 rounded-full animate-pulse"></div>
+          <div class="w-20 h-2 bg-slate-200 rounded-full animate-pulse"></div>
         </div>
       </div>
 
@@ -23,15 +23,18 @@
           <div class="flex flex-col gap-1">
             <div class="w-[200px] h-10 bg-white rounded-lg animate-pulse"></div>
             <div
-              class="w-[100px] h-3 bg-white rounded-oval animate-pulse"
+              class="w-[100px] h-3 bg-white rounded-full animate-pulse"
             ></div>
           </div>
         </div>
 
         <div class="flex gap-2.5 flex-row-reverse">
+          <div
+            class="w-8 h-8 rounded-oval bg-slate-200 flex-shrink-0 animate-pulse"
+          ></div>
           <div class="flex flex-col gap-1 items-end">
             <div
-              class="w-[240px] h-16 bg-blue-100 rounded-lg animate-pulse"
+              class="w-[240px] h-16 bg-yellow-50 rounded-lg animate-pulse"
             ></div>
             <div class="w-[80px] h-3 bg-white rounded-full animate-pulse"></div>
           </div>
@@ -39,7 +42,7 @@
 
         <div class="flex gap-2.5">
           <div
-            class="w-8 h-8 rounded-full bg-slate-200 flex-shrink-0 animate-pulse"
+            class="w-8 h-8 rounded-oval bg-slate-200 flex-shrink-0 animate-pulse"
           ></div>
           <div class="flex flex-col gap-1">
             <div class="w-[180px] h-14 bg-white rounded-lg animate-pulse"></div>
