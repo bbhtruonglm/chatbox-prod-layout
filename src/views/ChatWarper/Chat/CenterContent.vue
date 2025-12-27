@@ -1,5 +1,5 @@
 <template>
-  <SkeletonLoading v-if="!is_loading" />
+  <SkeletonLoading v-if="is_loading" />
   <div
     v-else
     id="chat__center-content"
