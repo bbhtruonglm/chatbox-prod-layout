@@ -64,10 +64,8 @@ class Main {
   saveCliendID() {
     /** id của client cần gửi tin nhắn tới */
     const CLIENT_ID = this.SERVICE_QUERY_STRING.get('client_id')
-
     // nếu không có id thì thôi
     if (!CLIENT_ID) return
-
     // lưu id vào local storage
     setItem('client_id', CLIENT_ID)
   }
