@@ -112,7 +112,7 @@
                 v-if="message.message_text"
                 :text="message.message_text"
               />
-              <UnsupportMessage v-else />
+              <!-- <UnsupportMessage v-else /> -->
             </div>
             <template
               v-else-if="message.message_type === 'client' && message.ad_id"
@@ -130,11 +130,11 @@
               :message
               :message_index="index"
             />
-            <UnsupportMessage
+            <!-- <UnsupportMessage
               v-else-if="
                 message.message_mid && message.message_mid !== 'undefined'
               "
-            />
+            /> -->
             <DoubleCheckIcon
               v-if="isLastPageMessage(message, index)"
               class="w-3 h-3 text-green-500 absolute -bottom-1.5 -right-11"
@@ -263,7 +263,33 @@ const select_conversation = computed(() => {
 })
 
 /** danh sách tin nhắn */
-const show_list_message = computed(() => messageStore.list_message)
+const show_list_message = computed(() =>
+  // xử lý logic hiển thị tin nhắn
+  messageStore.list_message.filter(message => {
+    // 1. Quan trọng: Nếu là tin nhắn quảng cáo (có ad_id) -> luôn hiển thị
+    if (message.ad_id) return true
+    // 2. Nếu là tin nhắn post (có fb_post_id) -> luôn hiển thị
+    if (message.fb_post_id) return true
+
+    // 2. Nếu có nội dung text hoặc postback -> hiển thị
+    if (message.message_text || message.postback_title) return true
+    /**  Khai báo attachments */
+    const ATTACHMENTS = message.message_attachments
+    // 2. Nếu không có attachments (và không có text) -> ẩn
+    if (!ATTACHMENTS?.length) return false
+
+    // 3. Kiểm tra xem có attachment nào hợp lệ để hiển thị không
+    const HAS_VALID_ATTACHMENT = ATTACHMENTS.some(att => {
+      // Nếu không phải template (ảnh, video...) -> hiển thị
+      // Hoặc nếu là template thì phải có payload -> hiển thị
+      if (att.type !== 'template' || att.payload) return true
+      // Nếu là template thì phải có payload -> hiển thị
+      return false
+    })
+    // Trả về true nếu có attachment hợp lệ
+    return HAS_VALID_ATTACHMENT
+  })
+)
 
 /**vị trí của tin nhắn cuối cùng nhân viên gửi */
 const last_client_message_index = computed(() =>

@@ -189,7 +189,7 @@ const $props = withDefaults(
   }>(),
   {}
 )
-console.log('$props.message', $props.message)
+
 /**tin nhắn này thuộc về dạng nào */
 const message_type = computed(() => $props.message?.message_type)
 /**kích thước của file đầu tiên */
@@ -214,7 +214,7 @@ const primary_emotion = computed(() => $props.message?.ai?.[0]?.emotion)
 const is_ai_slow_reply = computed(() => $props.message?.is_ai_slow_reply)
 /**Kiểm tra nền tảng có phải zalo không */
 const is_zalo_platform = computed(() =>
-  $props.message?.platform_type?.toUpperCase()?.includes('ZALO')
+  $props.message?.platform_type?.toUpperCase()?.includes('ZALO_PERSONAL')
 )
 
 /**
