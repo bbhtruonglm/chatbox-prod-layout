@@ -13,9 +13,16 @@
         :class="{
           'font-semibold': source?.unread_message_amount,
         }"
-        class="text-left truncate text-sm flex-grow min-w-0"
+        class="flex items-center gap-1 text-left text-sm flex-grow min-w-0"
       >
-        {{ source?.client_name || 'No name' }}
+        <!-- Tên khách hàng -->
+        <span class="truncate">{{ source?.client_name || 'No name' }}</span>
+        <!-- Icon trạng thái online của khách hàng - chỉ hiển thị cho page WEBSITE -->
+        <OnlineStatusIcon
+          v-if="source?.platform_type === 'WEBSITE'"
+          :is_online="source?.is_client_online"
+          size="sm"
+        />
       </div>
     </div>
     <div
@@ -33,6 +40,7 @@ import { DateHandle } from '@/utils/helper/DateHandle'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 import StaffAvatar from '@/components/Avatar/StaffAvatar.vue'
+import OnlineStatusIcon from '@/components/Icons/OnlineStatusIcon.vue'
 
 import ArrowDown from '@/components/Icons/ArrowDown.vue'
 

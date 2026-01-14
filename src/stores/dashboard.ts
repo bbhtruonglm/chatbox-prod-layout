@@ -1,21 +1,20 @@
-import { getLocal, saveLocal } from '@/service/helper/store'
-import { format as date_format, differenceInDays } from 'date-fns'
-import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
-
-import { UNLIMITED_VALUE } from '@/configs/constants/billing'
 import type {
   MemberShipInfo,
   OrgInfo,
   OwnerShipInfo,
 } from '@/service/interface/app/billing'
+import { computed, ref } from 'vue'
+import { format as date_format, differenceInDays } from 'date-fns'
+import { getLocal, saveLocal } from '@/service/helper/store'
 
 import type { AppInfo } from '@/service/interface/app/widget'
-import type { ModalPosition } from '@/service/interface/vue'
-import { SingletonMemberShipHelper } from '@/utils/helper/Billing/MemberShip'
 import type ConnectPage from '@/views/Dashboard/ConnectPage.vue'
 import type DropdownPickConnectPlatform from '@/views/Dashboard/SelectPage/DropdownPickConnectPlatform.vue'
 import type { ISelectPlatform } from '@/views/Dashboard/SelectPage/type'
+import type { ModalPosition } from '@/service/interface/vue'
+import { SingletonMemberShipHelper } from '@/utils/helper/Billing/MemberShip'
+import { UNLIMITED_VALUE } from '@/configs/constants/billing'
+import { defineStore } from 'pinia'
 import { gte } from 'lodash'
 
 const $member_ship_helper = SingletonMemberShipHelper.getInst()
@@ -165,17 +164,6 @@ export const useOrgStore = defineStore('org_store', () => {
       selected_org_info.value?.org_package?.org_quota_staff === UNLIMITED_VALUE
     )
   }
-  /**có phải là gói không giới hạn nhân viên không */
-  function lastReset() {
-    /**thời gian hết hạn */
-    const END_DATE = selected_org_info.value?.org_package?.org_last_reset_date
-
-    /** nếu không có thời gian hết hạn thì trả về rỗng */
-    if (!END_DATE) return ''
-
-    /** trả về thời gian thanh toán tiếp theo */
-    return date_format(new Date(END_DATE), 'hh:mm dd/MM/yyyy')
-  }
   /**có phải là gói miễn phí không */
   function isFreePack() {
     return selected_org_info.value?.org_package?.org_package_type === 'FREE'
@@ -293,7 +281,6 @@ export const useOrgStore = defineStore('org_store', () => {
     isUnlimitedPage,
     isUnlimitedStaff,
     isOverLimit,
-    lastReset,
   }
 })
 

@@ -1203,7 +1203,6 @@ const source: Language = {
               pack_use: 'Gói đang sử dụng',
               pack_time: 'Thời gian sử dụng',
               page_amount: 'Số lượng trang',
-              last_reset: 'Làm mới gói gần nhất',
               staff_amount: 'Số lượng nhân sự',
               bot: 'Chatbot',
               chat_feature: 'Các tính năng chat',

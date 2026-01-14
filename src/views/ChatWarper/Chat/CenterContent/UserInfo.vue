@@ -23,15 +23,27 @@
       </div>
 
       <div class="min-w-0">
-        <div
-          @click="
-            $clipboard.copy(
-              conversationStore.select_conversation?.client_name || ''
-            )
-          "
-          class="text-sm font-medium truncate cursor-copy"
-        >
-          {{ conversationStore.select_conversation?.client_name || 'No name' }}
+        <div class="flex items-center gap-1.5">
+          <div
+            @click="
+              $clipboard.copy(
+                conversationStore.select_conversation?.client_name || ''
+              )
+            "
+            class="text-sm font-medium truncate cursor-copy"
+          >
+            {{
+              conversationStore.select_conversation?.client_name || 'No name'
+            }}
+          </div>
+          <!-- Icon trạng thái online của khách hàng - chỉ hiển thị cho page WEBSITE -->
+          <OnlineStatusIcon
+            v-if="
+              conversationStore.select_conversation?.platform_type === 'WEBSITE'
+            "
+            :is_online="conversationStore.select_conversation?.is_client_online"
+            size="md"
+          />
         </div>
         <div
           v-if="
@@ -171,6 +183,7 @@ import Menu from '@/views/ChatWarper/Chat/CenterContent/UserInfo/Menu.vue'
 import ArrowDownIcon from '@/components/Icons/ArrowDown.vue'
 import DotIcon from '@/components/Icons/Dot.vue'
 import MailOpenIcon from '@/components/Icons/MailOpen.vue'
+import OnlineStatusIcon from '@/components/Icons/OnlineStatusIcon.vue'
 import { selectConversation } from '@/service/function'
 import { error } from '@/utils/decorator/Error'
 import { loading } from '@/utils/decorator/Loading'

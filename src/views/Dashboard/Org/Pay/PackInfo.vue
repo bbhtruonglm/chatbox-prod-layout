@@ -51,14 +51,6 @@
               {{ orgStore.selected_org_info?.org_package?.org_quota_page || 0 }}
             </template>
           </Item>
-          <Item
-            v-if="orgStore.lastReset()"
-            :title="$t('v1.view.main.dashboard.org.pay.last_reset')"
-          >
-            <span class="">
-              {{ orgStore.lastReset() }}
-            </span>
-          </Item>
           <Item :title="$t('v1.view.main.dashboard.org.pay.staff_amount')">
             <template v-if="orgStore.isUnlimitedStaff()">
               {{ $t('v1.view.main.dashboard.org.pay.unlimited') }}
