@@ -137,8 +137,6 @@ export interface ConversationInfo {
   ai_answer?: string
   /** giới tính */
   client_gender?: 'male' | 'female'
-  /** trạng thái online của khách hàng */
-  is_client_online?: boolean
 
   // * Các field custome thêm
   /** có thông tin khách mới từ extension gửi về */
