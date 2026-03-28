@@ -66,8 +66,6 @@ const source: Language = {
   'Trả lời sau _': 'Trả lời sau {duration}',
   Lọc: 'Lọc',
   Nhãn: 'Nhãn',
-  'nhãn': 'nhãn',
-  'Nhãn chung': 'Nhãn chung',
   'Trừ nhãn': 'Trừ nhãn',
   'Thời gian': 'Thời gian',
   'Nhân viên': 'Nhân viên',
